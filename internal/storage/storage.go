@@ -1,6 +1,8 @@
 package storage
 
 import (
+	"fmt"
+
 	"github.com/BillyBones007/pwdm_client/internal/customerror"
 	"github.com/BillyBones007/pwdm_client/internal/datatypes"
 	"github.com/BillyBones007/pwdm_client/internal/storage/models"
@@ -101,8 +103,10 @@ func (s *Storage) updateMap(dataType int32, table map[int]models.InfoModel, list
 	i := 1
 	if len(listRecords) > 0 {
 		for _, v := range listRecords {
-			table[i] = v
-			i++
+			if v.Type == dataType {
+				table[i] = v
+				i++
+			}
 		}
 		return nil
 	}
@@ -126,6 +130,7 @@ func (s *Storage) GetIdRecord(key int, dataType int32) int32 {
 		return -1
 	case datatypes.TextDataType:
 		if v, ok := s.TextData[key]; ok {
+			fmt.Printf("INFO: ID %d\n", v.Id)
 			return v.Id
 		}
 		return -1

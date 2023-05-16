@@ -2,19 +2,20 @@ package grpcclient
 
 import (
 	"context"
-	"fmt"
 	"log"
 
 	"github.com/BillyBones007/pwdm_client/internal/storage"
+	"github.com/BillyBones007/pwdm_client/internal/tools/encrypttools"
 	"google.golang.org/grpc/metadata"
 )
 
 // ClientGRPC - client structure.
 type ClientGRPC struct {
-	Config   *Config
-	Storage  *storage.Storage
-	AuthFlag bool
-	Token    string
+	Config    *Config
+	Storage   *storage.Storage
+	AuthFlag  bool
+	Token     string
+	Encrypter *encrypttools.Encrypter
 }
 
 // InitClient - client initialization.
@@ -24,7 +25,6 @@ func InitClient() *ClientGRPC {
 		log.Fatal(err)
 	}
 	storage := storage.NewStorage()
-	fmt.Printf("INFO: server address: %s\n", config.ServerAddr)
 	return &ClientGRPC{Config: config, Storage: storage}
 }
 

@@ -5,6 +5,7 @@ import (
 
 	"github.com/BillyBones007/pwdm_client/internal/datatypes"
 	"github.com/BillyBones007/pwdm_client/internal/storage/models"
+	"github.com/BillyBones007/pwdm_client/internal/tools/encrypttools"
 	pb "github.com/BillyBones007/pwdm_service_api/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -25,6 +26,7 @@ func (c *ClientGRPC) Registration(user models.UserModel) (authUser string, err e
 	}
 	c.AuthFlag = true
 	c.Token = resp.Token
+	c.Encrypter = encrypttools.NewEncrypter(user.Password)
 	authUser = user.Login
 
 	return authUser, nil
@@ -45,6 +47,7 @@ func (c *ClientGRPC) LogIn(user models.UserModel) (authUser string, err error) {
 	}
 	c.AuthFlag = true
 	c.Token = resp.Token
+	c.Encrypter = encrypttools.NewEncrypter(user.Password)
 	authUser = user.Login
 
 	return authUser, nil
@@ -54,5 +57,6 @@ func (c *ClientGRPC) LogIn(user models.UserModel) (authUser string, err error) {
 func (c *ClientGRPC) SignOut() {
 	c.AuthFlag = false
 	c.Token = ""
+	c.Encrypter = encrypttools.NewEncrypter("")
 	c.Storage.Clear(datatypes.LoginPasswordDataType, datatypes.CardDataType, datatypes.TextDataType, datatypes.BinaryDataType)
 }

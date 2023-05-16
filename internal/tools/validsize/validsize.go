@@ -7,7 +7,7 @@ import (
 )
 
 // Limit file size.
-const fileSizeLimit int64 = 1024 * 1024 * 10 // 10Mb
+const fileSizeLimit int64 = 1024 * 1024 * 3 // 3Mb
 
 // ValidFileSize - checks file size(10Мb limit).
 func ValidFileSize(file string) (bool, error) {
