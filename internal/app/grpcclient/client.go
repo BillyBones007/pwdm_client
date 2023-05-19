@@ -13,9 +13,9 @@ import (
 type ClientGRPC struct {
 	Config    *Config
 	Storage   *storage.Storage
-	AuthFlag  bool
-	Token     string
 	Encrypter *encrypttools.Encrypter
+	Token     string
+	AuthFlag  bool
 }
 
 // InitClient - client initialization.

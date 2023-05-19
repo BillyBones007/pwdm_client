@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/BillyBones007/pwdm_client/internal/customerror"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -11,7 +12,7 @@ import (
 type AuthPageModel struct {
 	focusIndex int
 	inputs     []textinput.Model
-	err        string
+	err        error
 }
 
 func InitialAuthPageModel() AuthPageModel {
@@ -132,16 +133,22 @@ func (m AuthPageModel) View() string {
 	}
 	fmt.Fprintf(&b, "\n\n%s\n\n", *button)
 
-	if m.err != "" {
-		b.WriteString(errStyle.Render(m.err))
-		b.WriteRune('\n')
+	if m.err != nil {
+		if m.err.Error() == customerror.ErrGRPCLogPwdIncorrect.Error() {
+			b.WriteString(errStyle.Render(customerror.ErrLogPwdIncorrect.Error()))
+			b.WriteRune('\n')
+
+		} else {
+			b.WriteString(errStyle.Render(customerror.ErrUnknown.Error()))
+			b.WriteRune('\n')
+		}
 	}
 
-	b.WriteString(helpStyle.Render("Authorization:\n "))
-	b.WriteString(helpStyle.Render("\rEnter your login/password and press [ Submit ]\n\n "))
-	b.WriteString(helpStyle.Render(" \rCtrl+c - Quit\n"))
-	b.WriteString(helpStyle.Render(" \rTAB or \u2193 or enter - down\n"))
-	b.WriteString(helpStyle.Render(" \rShift+TAB or \u2191 - up\n"))
+	b.WriteString(textStyle.Render("Authorization:\n "))
+	b.WriteString(textStyle.Render("\rEnter your login/password and press [ Submit ]\n\n "))
+	b.WriteString(textStyle.Render(" \rCtrl+c - Quit\n"))
+	b.WriteString(textStyle.Render(" \rTAB or \u2193 or enter - down\n"))
+	b.WriteString(textStyle.Render(" \rShift+TAB or \u2191 - up\n"))
 
 	return b.String()
 }
@@ -153,8 +160,5 @@ func (m AuthPageModel) setLogPwd() tea.Cmd {
 }
 
 func (m *AuthPageModel) Reset() {
-	m.err = ""
-	for _, i := range m.inputs {
-		i.Reset()
-	}
+	m.err = nil
 }

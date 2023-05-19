@@ -1,5 +1,7 @@
 package ui
 
+import "time"
+
 type startMsg struct {
 	signIn bool
 	reg    bool
@@ -10,6 +12,4 @@ type userMsg struct {
 	password string
 }
 
-type errorMsg struct {
-	err error
-}
+type tickMsg time.Time

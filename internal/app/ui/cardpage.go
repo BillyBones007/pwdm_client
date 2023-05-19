@@ -31,8 +31,8 @@ var (
 )
 
 type CardPageModel struct {
-	inputs  []textinput.Model
 	focused int
+	inputs  []textinput.Model
 	err     error
 }
 

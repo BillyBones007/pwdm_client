@@ -8,10 +8,10 @@ import (
 )
 
 type StartPageModel struct {
-	buildInfo    BuildInfo
 	focusIndex   int
 	signinButton int
 	regButton    int
+	buildInfo    BuildInfo
 	text         string
 }
 
@@ -21,7 +21,7 @@ func InitialStartPageModel(buildInfo BuildInfo) StartPageModel {
 		focusIndex:   1,
 		signinButton: 1,
 		regButton:    2,
-		text:         helpStyle.Render(helpText),
+		text:         textStyle.Render(helpText),
 	}
 	return m
 }
@@ -69,7 +69,7 @@ func (m StartPageModel) View() string {
 		rButton = &focusedButtonRegistr
 	}
 
-	b.WriteString(helpStyle.Render(helpText))
+	b.WriteString(textStyle.Render(helpText))
 
 	fmt.Fprintf(&b, "\n\n%s\t%s\n\n", *sButton, *rButton)
 

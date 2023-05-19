@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/BillyBones007/pwdm_client/internal/customerror"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
 )
@@ -11,7 +12,7 @@ import (
 type RegistrationPageModel struct {
 	focusIndex int
 	inputs     []textinput.Model
-	err        string
+	err        error
 }
 
 func InitialRegistrationPageModel() RegistrationPageModel {
@@ -53,6 +54,10 @@ func (m RegistrationPageModel) Update(msg tea.Msg) (RegistrationPageModel, tea.C
 		switch msg.String() {
 		case "ctrl+c":
 			return m, tea.Quit
+
+		case "esc":
+			m.Reset()
+			return m, nil
 
 		// Set focus to next input
 		case "tab", "shift+tab", "enter", "up", "down":
@@ -130,15 +135,22 @@ func (m RegistrationPageModel) View() string {
 	}
 	fmt.Fprintf(&b, "\n\n%s\n\n", *button)
 
-	if m.err != "" {
-		b.WriteString(errStyle.Render(m.err))
-		b.WriteRune('\n')
+	if m.err != nil {
+		if m.err.Error() == customerror.ErrGRPCUserIsExists.Error() {
+			b.WriteString(errStyle.Render(customerror.ErrUserIsExists.Error()))
+			b.WriteRune('\n')
+
+		} else {
+			b.WriteString(errStyle.Render(customerror.ErrUnknown.Error()))
+			b.WriteRune('\n')
+		}
 	}
-	b.WriteString(helpStyle.Render("Registration:\n "))
-	b.WriteString(helpStyle.Render("\rEnter your login/password and press [ Submit ]\n\n "))
-	b.WriteString(helpStyle.Render(" \rCtrl+c or Esc - Quit\n"))
-	b.WriteString(helpStyle.Render(" \rTAB or \u2193 or enter - down\n"))
-	b.WriteString(helpStyle.Render(" \rShift+TAB or \u2191 - up\n"))
+
+	b.WriteString(textStyle.Render("Registration:\n "))
+	b.WriteString(textStyle.Render("\rEnter your login/password and press [ Submit ]\n\n "))
+	b.WriteString(textStyle.Render(" \rCtrl+c or Esc - Quit\n"))
+	b.WriteString(textStyle.Render(" \rTAB or \u2193 or enter - down\n"))
+	b.WriteString(textStyle.Render(" \rShift+TAB or \u2191 - up\n"))
 
 	return b.String()
 }
@@ -147,4 +159,8 @@ func (m RegistrationPageModel) setLogPwd() tea.Cmd {
 	return func() tea.Msg {
 		return userMsg{login: m.inputs[0].Value(), password: m.inputs[1].Value()}
 	}
+}
+
+func (m *RegistrationPageModel) Reset() {
+	m.err = nil
 }
