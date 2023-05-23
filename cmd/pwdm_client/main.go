@@ -8,7 +8,8 @@ import (
 	// "github.com/BillyBones007/pwdm_client/internal/app/grpcclient"
 	// "github.com/BillyBones007/pwdm_client/internal/datatypes"
 	// "github.com/BillyBones007/pwdm_client/internal/storage/models"
-	"github.com/BillyBones007/pwdm_client/internal/app/ui"
+	// "github.com/BillyBones007/pwdm_client/internal/app/ui"
+	"github.com/BillyBones007/pwdm_client/internal/app/uishell"
 )
 
 // Global variables for the linker.
@@ -18,8 +19,11 @@ var (
 )
 
 func main() {
-	builInfo := ui.BuildInfo{Version: buildVersion, Date: buildDate}
-	ui.StartUI(builInfo)
+	appData := uishell.AppData{BuildVersion: buildVersion, BuildDate: buildDate}
+	app := uishell.NewShellUI(appData)
+	app.RunShell()
+	// buildInfo := ui.BuildInfo{Version: buildVersion, Date: buildDate}
+	// ui.StartUI(buildInfo)
 	// TODO: запускается отдельная горутина, которая опрашивает сервер
 	// через определенный промежуток времени на наличие новой информации в базе.
 	// ui.UserInterface()

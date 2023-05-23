@@ -33,7 +33,7 @@ func (c *ClientGRPC) SendLogPwd(data models.LogPwdModel) (string, error) {
 // Returns LogPwdModel type.
 func (c *ClientGRPC) GetLogPwd(keyStorage int) (models.LogPwdModel, error) {
 	result := models.LogPwdModel{}
-	idRecord := c.Storage.GetIdRecord(keyStorage, datatypes.LoginPasswordDataType)
+	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.LoginPasswordDataType)
 	ctx := c.getContext()
 	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetLogPwdInterceptor))
 	if err != nil {
@@ -82,7 +82,7 @@ func (c *ClientGRPC) SendCard(data models.CardModel) (string, error) {
 // Returns CardModel type.
 func (c *ClientGRPC) GetCard(keyStorage int) (models.CardModel, error) {
 	result := models.CardModel{}
-	idRecord := c.Storage.GetIdRecord(keyStorage, datatypes.CardDataType)
+	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.CardDataType)
 	ctx := c.getContext()
 	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetCardInterceptor))
 	if err != nil {
@@ -133,7 +133,7 @@ func (c *ClientGRPC) SendText(data models.TextDataModel) (string, error) {
 // Returns TextModel type.
 func (c *ClientGRPC) GetText(keyStorage int) (models.TextDataModel, error) {
 	result := models.TextDataModel{}
-	idRecord := c.Storage.GetIdRecord(keyStorage, datatypes.TextDataType)
+	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.TextDataType)
 	ctx := c.getContext()
 	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetTextInterceptor))
 	if err != nil {
@@ -180,7 +180,7 @@ func (c *ClientGRPC) SendBinary(data models.BinaryDataModel) (string, error) {
 // Returns BinaryModel type.
 func (c *ClientGRPC) GetBinary(keyStorage int) (models.BinaryDataModel, error) {
 	result := models.BinaryDataModel{}
-	idRecord := c.Storage.GetIdRecord(keyStorage, datatypes.BinaryDataType)
+	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.BinaryDataType)
 	ctx := c.getContext()
 	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetBinaryInterceptor))
 	if err != nil {

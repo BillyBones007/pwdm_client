@@ -4,7 +4,6 @@ import (
 	"context"
 	"log"
 
-	"github.com/BillyBones007/pwdm_client/internal/storage"
 	"github.com/BillyBones007/pwdm_client/internal/tools/encrypttools"
 	"google.golang.org/grpc/metadata"
 )
@@ -12,7 +11,6 @@ import (
 // ClientGRPC - client structure.
 type ClientGRPC struct {
 	Config    *Config
-	Storage   *storage.Storage
 	Encrypter *encrypttools.Encrypter
 	Token     string
 	AuthFlag  bool
@@ -20,12 +18,11 @@ type ClientGRPC struct {
 
 // InitClient - client initialization.
 func InitClient() *ClientGRPC {
-	config, err := setFileConfig()
+	config, err := setConfig()
 	if err != nil {
 		log.Fatal(err)
 	}
-	storage := storage.NewStorage()
-	return &ClientGRPC{Config: config, Storage: storage}
+	return &ClientGRPC{Config: config}
 }
 
 // getContext - returns a context with a token.

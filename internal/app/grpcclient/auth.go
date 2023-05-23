@@ -58,5 +58,5 @@ func (c *ClientGRPC) SignOut() {
 	c.AuthFlag = false
 	c.Token = ""
 	c.Encrypter = encrypttools.NewEncrypter("")
-	c.Storage.Clear(datatypes.LoginPasswordDataType, datatypes.CardDataType, datatypes.TextDataType, datatypes.BinaryDataType)
+	c.Config.Storage.Clear(datatypes.LoginPasswordDataType, datatypes.CardDataType, datatypes.TextDataType, datatypes.BinaryDataType)
 }

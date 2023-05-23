@@ -12,7 +12,7 @@ import (
 // Accepts the key from some map in Storage structure, and data type.
 // Returns error or nil.
 func (c *ClientGRPC) DeleteRecord(keyStorage int, dataType int32) error {
-	idRecord := c.Storage.GetIdRecord(keyStorage, dataType)
+	idRecord := c.Config.Storage.GetIdRecord(keyStorage, dataType)
 	ctx := c.getContext()
 	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {

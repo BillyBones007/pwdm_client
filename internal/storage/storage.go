@@ -143,3 +143,19 @@ func (s *Storage) GetIdRecord(key int, dataType int32) int32 {
 		return -1
 	}
 }
+
+// GetListRecords - returns the map records models.InfoModel for current data type.
+func (s *Storage) GetListRecords(dataType int32) map[int]models.InfoModel {
+	switch dataType {
+	case datatypes.LoginPasswordDataType:
+		return s.LogPwdData
+	case datatypes.CardDataType:
+		return s.CardData
+	case datatypes.TextDataType:
+		return s.TextData
+	case datatypes.BinaryDataType:
+		return s.BinaryData
+	default:
+		return nil
+	}
+}

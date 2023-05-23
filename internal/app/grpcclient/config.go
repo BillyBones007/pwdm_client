@@ -3,6 +3,8 @@ package grpcclient
 import (
 	"encoding/json"
 	"os"
+
+	"github.com/BillyBones007/pwdm_client/internal/storage"
 )
 
 const configFile string = "config.json"
@@ -10,11 +12,13 @@ const configFile string = "config.json"
 // Config - configuration the client.
 type Config struct {
 	ServerAddr string `json:"server_address"`
+	Storage    *storage.Storage
 }
 
-// setFileConfig - set configuration from config file.
-func setFileConfig() (*Config, error) {
+// setConfig - set configuration from config file.
+func setConfig() (*Config, error) {
 	config := &Config{}
+	config.Storage = storage.NewStorage()
 	data, err := os.ReadFile(configFile)
 	if err != nil {
 		return config, err
