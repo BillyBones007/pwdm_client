@@ -8,6 +8,57 @@ import (
 	"github.com/c-bata/go-prompt"
 )
 
+// Commands and subcommands for completer.
+var (
+	authUserCommands = []prompt.Suggest{
+		{Text: "logout", Description: "Log out of your account"},
+		{Text: "exit", Description: "Exit this program"},
+		{Text: "show", Description: "Show user saved data"},
+		{Text: "save", Description: "Save user data on the server"},
+		{Text: "get", Description: "Get user data from server"},
+		{Text: "delete", Description: "Delete user data from server"},
+	}
+
+	guestUserCommands = []prompt.Suggest{
+		{Text: "login", Description: "Log in to your account"},
+		{Text: "register", Description: "Add a new user"},
+		{Text: "exit", Description: "Exit this program"},
+		{Text: "help", Description: "Help information"},
+	}
+
+	saveSubcommands = []prompt.Suggest{
+		{Text: "lp", Description: "Save login/password data on the server"},
+		{Text: "card", Description: "Save bank cards data on the server"},
+		{Text: "text", Description: "Save text data on the server"},
+		{Text: "binary", Description: "Save binary data on the server"},
+	}
+
+	saveTextSubcommands = []prompt.Suggest{
+		{Text: "-f", Description: "Save text data from file on the server"},
+	}
+
+	getSubcommands = []prompt.Suggest{
+		{Text: "lp", Description: "Get login/password data from server"},
+		{Text: "card", Description: "Get bank cards data from server"},
+		{Text: "text", Description: "Get text data from server"},
+		{Text: "binary", Description: "Get binary data from server"},
+	}
+
+	showSubcommands = []prompt.Suggest{
+		{Text: "lp", Description: "Show saved login/password data"},
+		{Text: "card", Description: "Show saved bank cards data"},
+		{Text: "text", Description: "Show saved text data"},
+		{Text: "binary", Description: "Show saved binary data"},
+	}
+
+	deleteSubcommands = []prompt.Suggest{
+		{Text: "lp", Description: "Select login/password data to delete"},
+		{Text: "card", Description: "Select bank cards data to delete"},
+		{Text: "text", Description: "Select text data to delete"},
+		{Text: "binary", Description: "Select binary data to delete"},
+	}
+)
+
 // getLogPwdInfo- returns login/password data list of the current user
 func getLogPwdInfo(client *grpcclient.ClientGRPC) []prompt.Suggest {
 	if client.AuthFlag {

@@ -17,4 +17,8 @@ var (
 	ErrUserIsExists error = errors.New("user is exists, try using a different username")
 	// ErrGRPCUserIsExists - return from server
 	ErrGRPCUserIsExists error = errors.New("rpc error: code = Unknown desc = user is exists")
+
+	ErrInvalildCommand error = errors.New("invalid command")
+	ErrReadTextFile    error = errors.New("error reading text file")
+	ErrEmptyFields     error = errors.New("required fields is empty")
 )

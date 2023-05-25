@@ -1,8 +1,6 @@
 package grpcclient
 
 import (
-	"fmt"
-
 	pb "github.com/BillyBones007/pwdm_service_api/api"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
@@ -21,10 +19,9 @@ func (c *ClientGRPC) DeleteRecord(keyStorage int, dataType int32) error {
 	defer conn.Close()
 
 	client := pb.NewDeleteServiceClient(conn)
-	req := &pb.DeleteItemReq{Id: idRecord}
-	resp, err := client.DelItem(ctx, req)
+	req := &pb.DeleteItemReq{Id: idRecord, Type: dataType}
+	_, err = client.DelItem(ctx, req)
 	if err != nil {
-		fmt.Println(resp.Error)
 		return err
 	}
 

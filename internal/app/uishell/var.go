@@ -19,3 +19,6 @@ const helpText string = `Клиент менеджера паролей.
 register - регистрация нового пользователя
 login - войти в учетную запись
 exit - выход из приложения`
+
+// Hint
+const hint string = `NOTE:  The Title, Comment and Tag fields are optional.`
