@@ -3,7 +3,6 @@ package grpcclient
 import (
 	pb "github.com/BillyBones007/pwdm_service_api/api"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 // DeleteRecord - delete record from server.
@@ -12,7 +11,7 @@ import (
 func (c *ClientGRPC) DeleteRecord(keyStorage int, dataType int32) error {
 	idRecord := c.Config.Storage.GetIdRecord(keyStorage, dataType)
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds))
 	if err != nil {
 		return err
 	}

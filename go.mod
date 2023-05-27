@@ -15,7 +15,7 @@ require (
 )
 
 require (
-	github.com/BillyBones007/pwdm_service_api/api v0.0.0-20230525053905-7dc6636cd779
+	github.com/BillyBones007/pwdm_service_api/api v0.0.0-20230527044736-53a6d78519c0
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/golang/protobuf v1.5.3 // indirect
 	github.com/mattn/go-isatty v0.0.18 // indirect

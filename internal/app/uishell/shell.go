@@ -38,9 +38,6 @@ func NewShellUI(appData AppData) *ShellUI {
 func (s *ShellUI) RunShell() {
 	fmt.Println("\n*** Welcom to Data Manager CLI ***")
 	fmt.Printf("version %s, build date %s\n", s.AppData.BuildVersion, s.AppData.BuildDate)
-	// fmt.Println("\nPlease use `exit` or `Ctrl+d` to exit this program.")
-	// fmt.Println("Use `login` to log in to your account or `register` to add a new user")
-	// fmt.Println("Use `help` for more information")
 	fmt.Println(mainPage)
 	defer fmt.Println("Bye!")
 	p := prompt.New(

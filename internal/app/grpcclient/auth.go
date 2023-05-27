@@ -8,12 +8,11 @@ import (
 	"github.com/BillyBones007/pwdm_client/internal/tools/encrypttools"
 	pb "github.com/BillyBones007/pwdm_service_api/api"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Registration - registers a new user.
 func (c *ClientGRPC) Registration(user models.UserModel) (authUser string, err error) {
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds))
 	if err != nil {
 		return authUser, err
 	}
@@ -34,7 +33,7 @@ func (c *ClientGRPC) Registration(user models.UserModel) (authUser string, err e
 
 // Authentication - user authentication.
 func (c *ClientGRPC) LogIn(user models.UserModel) (authUser string, err error) {
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds))
 	if err != nil {
 		return authUser, err
 	}

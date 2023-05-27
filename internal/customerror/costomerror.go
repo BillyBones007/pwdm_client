@@ -21,4 +21,5 @@ var (
 	ErrInvalildCommand error = errors.New("invalid command")
 	ErrReadTextFile    error = errors.New("error reading text file")
 	ErrEmptyFields     error = errors.New("required fields is empty")
+	ErrUnknownDataType error = errors.New("unknown data type")
 )

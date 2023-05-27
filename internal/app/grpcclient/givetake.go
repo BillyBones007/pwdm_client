@@ -5,13 +5,12 @@ import (
 	"github.com/BillyBones007/pwdm_client/internal/storage/models"
 	pb "github.com/BillyBones007/pwdm_service_api/api"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 // SendLogPwd - send login and password to the server.
 func (c *ClientGRPC) SendLogPwd(data models.LogPwdModel) (string, error) {
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.SendLogPwdInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.SendLogPwdInterceptor))
 	if err != nil {
 		return "", err
 	}
@@ -35,7 +34,7 @@ func (c *ClientGRPC) GetLogPwd(keyStorage int) (models.LogPwdModel, error) {
 	result := models.LogPwdModel{}
 	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.LoginPasswordDataType)
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetLogPwdInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.GetLogPwdInterceptor))
 	if err != nil {
 		return result, err
 	}
@@ -59,7 +58,7 @@ func (c *ClientGRPC) GetLogPwd(keyStorage int) (models.LogPwdModel, error) {
 // SendCard - send card data to the server.
 func (c *ClientGRPC) SendCard(data models.CardModel) (string, error) {
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.SendCardInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.SendCardInterceptor))
 	if err != nil {
 		return "", err
 	}
@@ -84,7 +83,7 @@ func (c *ClientGRPC) GetCard(keyStorage int) (models.CardModel, error) {
 	result := models.CardModel{}
 	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.CardDataType)
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetCardInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.GetCardInterceptor))
 	if err != nil {
 		return result, err
 	}
@@ -111,7 +110,7 @@ func (c *ClientGRPC) GetCard(keyStorage int) (models.CardModel, error) {
 // SendText - send text data to the server.
 func (c *ClientGRPC) SendText(data models.TextDataModel) (string, error) {
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithChainUnaryInterceptor(c.SendTextInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithChainUnaryInterceptor(c.SendTextInterceptor))
 	if err != nil {
 		return "", err
 	}
@@ -135,7 +134,7 @@ func (c *ClientGRPC) GetText(keyStorage int) (models.TextDataModel, error) {
 	result := models.TextDataModel{}
 	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.TextDataType)
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetTextInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.GetTextInterceptor))
 	if err != nil {
 		return result, err
 	}
@@ -158,7 +157,7 @@ func (c *ClientGRPC) GetText(keyStorage int) (models.TextDataModel, error) {
 // SendBinary - send binary data to the server.
 func (c *ClientGRPC) SendBinary(data models.BinaryDataModel) (string, error) {
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.SendBinaryInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.SendBinaryInterceptor))
 	if err != nil {
 		return "", err
 	}
@@ -182,7 +181,7 @@ func (c *ClientGRPC) GetBinary(keyStorage int) (models.BinaryDataModel, error) {
 	result := models.BinaryDataModel{}
 	idRecord := c.Config.Storage.GetIdRecord(keyStorage, datatypes.BinaryDataType)
 	ctx := c.getContext()
-	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithUnaryInterceptor(c.GetBinaryInterceptor))
+	conn, err := grpc.Dial(c.Config.ServerAddr, grpc.WithTransportCredentials(c.creds), grpc.WithUnaryInterceptor(c.GetBinaryInterceptor))
 	if err != nil {
 		return result, err
 	}

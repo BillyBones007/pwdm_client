@@ -44,6 +44,17 @@ var (
 		{Text: "binary", Description: "Get binary data from server"},
 	}
 
+	editSubcommands = []prompt.Suggest{
+		{Text: "lp", Description: "Edit record login/password data on the server"},
+		{Text: "card", Description: "Edit record bank cards data on the server"},
+		{Text: "text", Description: "Edit record text data on the server"},
+		{Text: "binary", Description: "Edit record binary data on the server"},
+	}
+
+	editTextSubcommands = []prompt.Suggest{
+		{Text: "-f", Description: "Update text data from file"},
+	}
+
 	showSubcommands = []prompt.Suggest{
 		{Text: "lp", Description: "Show saved login/password data"},
 		{Text: "card", Description: "Show saved bank cards data"},

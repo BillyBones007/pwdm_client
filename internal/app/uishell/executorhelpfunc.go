@@ -152,6 +152,153 @@ func (s *ShellUI) saveDialogue(command string) error {
 	}
 }
 
+// editRecordDialogue - updates the record with new values.
+func (s *ShellUI) editRecordDialogue(in string) (string, error) {
+	in = strings.TrimSpace(in)
+	commands := strings.Split(in, " ")
+	if len(commands) < 3 {
+		return "", customerror.ErrInvalildCommand
+	}
+	switch commands[1] {
+	case "lp":
+		key, err := strconv.Atoi(commands[2])
+		if err != nil {
+			return "", customerror.ErrInvalildCommand
+		}
+		data := models.LogPwdModel{}
+		fmt.Println("***")
+		fmt.Println("Enter a new Title, Comment, Tag, Login and Password to update:")
+		fmt.Println(hint)
+		fmt.Println("***")
+		data.TechData.Title = prompt.Input("Enter a new title > ", s.Completer.Complete)
+		data.TechData.Comment = prompt.Input("Enter a new comment > ", s.Completer.Complete)
+		data.TechData.Tag = prompt.Input("Enter a new tag > ", s.Completer.Complete)
+		data.TechData.Type = datatypes.LoginPasswordDataType
+		data.Login = prompt.Input("Enter a new login > ", s.Completer.Complete)
+		data.Password = prompt.Input("Enter a new password > ", s.Completer.Complete)
+		if data.Login == "" || data.Password == "" {
+			return "", customerror.ErrEmptyFields
+		}
+		resp, err := s.Client.UpdateRecord(key, datatypes.LoginPasswordDataType, data)
+		if err != nil {
+			return "", err
+		}
+		return resp, nil
+
+	case "card":
+		key, err := strconv.Atoi(commands[2])
+		if err != nil {
+			return "", customerror.ErrInvalildCommand
+		}
+		data := models.CardModel{}
+		fmt.Println("***")
+		fmt.Println("Enter a new Title, Comment, Tag and bank card data to update:")
+		fmt.Println(hint)
+		fmt.Println("***")
+		data.TechData.Title = prompt.Input("Enter a new title > ", s.Completer.Complete)
+		data.TechData.Comment = prompt.Input("Enter a new comment > ", s.Completer.Complete)
+		data.TechData.Tag = prompt.Input("Enter a new tag > ", s.Completer.Complete)
+		data.TechData.Type = datatypes.CardDataType
+		data.Num = prompt.Input("Enter a new card number > ", s.Completer.Complete)
+		data.CVC = prompt.Input("Enter a new CVC number > ", s.Completer.Complete)
+		data.Date = prompt.Input("Enter a new expiration date > ", s.Completer.Complete)
+		data.FirstName = prompt.Input("Enter a new First name > ", s.Completer.Complete)
+		data.LastName = prompt.Input("Enter a new Last name > ", s.Completer.Complete)
+		if data.Num == "" || data.CVC == "" || data.Date == "" || data.FirstName == "" || data.LastName == "" {
+			return "", customerror.ErrEmptyFields
+		}
+		err = validcard.CnValidator(data.Num)
+		if err != nil {
+			return "", err
+		}
+		err = validcard.CVCValidator(data.CVC)
+		if err != nil {
+			return "", err
+		}
+		err = validcard.ExpValidator(data.Date)
+		if err != nil {
+			return "", err
+		}
+		resp, err := s.Client.UpdateRecord(key, datatypes.CardDataType, data)
+		if err != nil {
+			return "", err
+		}
+		return resp, nil
+
+	case "text":
+		if len(commands) > 3 {
+			switch commands[3] {
+			case "-f":
+				key, err := strconv.Atoi(commands[2])
+				if err != nil {
+					return "", customerror.ErrInvalildCommand
+				}
+				data := models.TextDataModel{}
+				fmt.Println("***")
+				fmt.Println("Enter a new Title, Comment, Tag and text file to update:")
+				fmt.Println(hint)
+				fmt.Println("***")
+				data.TechData.Title = prompt.Input("Enter a new title > ", s.Completer.Complete)
+				data.TechData.Comment = prompt.Input("Enter a new comment > ", s.Completer.Complete)
+				data.TechData.Tag = prompt.Input("Enter a new tag > ", s.Completer.Complete)
+				data.TechData.Type = datatypes.TextDataType
+				data.Data = prompt.Input("Enter path to text file > ", s.Completer.Complete)
+				resp, err := s.updateText(key, data, true)
+				if err != nil {
+					return "", err
+				}
+				return resp, nil
+			}
+		}
+		key, err := strconv.Atoi(commands[2])
+		if err != nil {
+			return "", customerror.ErrInvalildCommand
+		}
+		data := models.TextDataModel{}
+		fmt.Println("***")
+		fmt.Println("Enter a new Title, Comment, Tag and some text to update:")
+		fmt.Println(hint)
+		fmt.Println("***")
+		data.TechData.Title = prompt.Input("Enter a new title > ", s.Completer.Complete)
+		data.TechData.Comment = prompt.Input("Enter a new comment > ", s.Completer.Complete)
+		data.TechData.Tag = prompt.Input("Enter a new tag > ", s.Completer.Complete)
+		data.TechData.Type = datatypes.TextDataType
+		data.Data = prompt.Input("Enter some text > ", s.Completer.Complete)
+		if data.Data == "" {
+			return "", customerror.ErrEmptyFields
+		}
+		resp, err := s.updateText(key, data, false)
+		if err != nil {
+			return "", err
+		}
+		return resp, nil
+
+	case "binary":
+		key, err := strconv.Atoi(commands[2])
+		if err != nil {
+			return "", customerror.ErrInvalildCommand
+		}
+		data := models.BinaryDataModel{}
+		fmt.Println("***")
+		fmt.Println("Enter a new Title, Comment, Tag and binary file to save:")
+		fmt.Println(hint)
+		fmt.Println("***")
+		data.TechData.Title = prompt.Input("Enter a new title > ", s.Completer.Complete)
+		data.TechData.Comment = prompt.Input("Enter a new comment > ", s.Completer.Complete)
+		data.TechData.Tag = prompt.Input("Enter a new tag > ", s.Completer.Complete)
+		data.TechData.Type = datatypes.BinaryDataType
+		path := prompt.Input("Enter path to binary file > ", s.Completer.Complete)
+		resp, err := s.updateBinary(key, data, path)
+		if err != nil {
+			return "", err
+		}
+		return resp, nil
+
+	default:
+		return "", customerror.ErrInvalildCommand
+	}
+}
+
 // saveLogPwd - save login/password data on the server.
 func (s *ShellUI) saveLogPwd(data models.LogPwdModel) (string, error) {
 	resp, err := s.Client.SendLogPwd(data)
@@ -203,6 +350,47 @@ func (s *ShellUI) saveBinary(data models.BinaryDataModel, path string) (string, 
 	}
 	data.Data = fromFile
 	resp, err := s.Client.SendBinary(data)
+	if err != nil {
+		return "", err
+	}
+	return resp, nil
+}
+
+// updateText - update text data on the server.
+// If file true - saved object file.
+// If file false - saved object input text.
+func (s *ShellUI) updateText(key int, data models.TextDataModel, file bool) (string, error) {
+	if !file {
+		resp, err := s.Client.UpdateRecord(key, datatypes.TextDataType, data)
+		if err != nil {
+			return "", err
+		}
+		return resp, nil
+	}
+	path := strings.TrimSpace(data.Data)
+	fromFile, err := filetools.ReadTextFile(path)
+	if err != nil {
+		return "", err
+	}
+	data.Data = fromFile
+	resp, err := s.Client.UpdateRecord(key, datatypes.TextDataType, data)
+	if err != nil {
+		return "", err
+	}
+	return resp, nil
+}
+
+// updateBinary - update binary data on the server.
+// If file true - saved object file.
+// If file false - saved object input text.
+func (s *ShellUI) updateBinary(key int, data models.BinaryDataModel, path string) (string, error) {
+	path = strings.TrimSpace(path)
+	fromFile, err := filetools.ReadBinaryFile(path)
+	if err != nil {
+		return "", err
+	}
+	data.Data = fromFile
+	resp, err := s.Client.UpdateRecord(key, datatypes.BinaryDataType, data)
 	if err != nil {
 		return "", err
 	}

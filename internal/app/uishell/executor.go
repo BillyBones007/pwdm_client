@@ -189,6 +189,27 @@ func (s *ShellUI) executor(in string) {
 		}
 		return
 
+	case "edit":
+		confirmation := prompt.Input("Edit the selected record? (y/n) > ", s.Completer.Complete)
+		if confirmation == "n" {
+			fmt.Println("***")
+			fmt.Println("Edit canceled")
+			fmt.Println("***")
+			return
+		} else if confirmation == "y" {
+			titleRec, err := s.editRecordDialogue(in)
+			if err != nil {
+				fmt.Println("\n***")
+				fmt.Println(err)
+				fmt.Println("Error update record!")
+				fmt.Println("***")
+			}
+			fmt.Println("\n***")
+			fmt.Printf("\nRecord `%s` has been update\n\n", titleRec)
+			fmt.Println("***")
+			return
+		}
+
 	default:
 		return
 	}

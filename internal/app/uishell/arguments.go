@@ -49,6 +49,32 @@ func (c *Completer) argumentsCompleter(args []string) []prompt.Suggest {
 			}
 		}
 
+	case "edit":
+		second := args[1]
+		if len(args) == 2 {
+			return prompt.FilterHasPrefix(editSubcommands, second, true)
+		}
+		if len(args) == 3 {
+			third := args[2]
+			switch second {
+			case "lp":
+				return prompt.FilterContains(getLogPwdInfo(c.client), third, true)
+			case "card":
+				return prompt.FilterContains(getCardInfo(c.client), third, true)
+			case "text":
+				return prompt.FilterContains(getTextInfo(c.client), third, true)
+			case "binary":
+				return prompt.FilterContains(getBinaryInfo(c.client), third, true)
+			}
+			if len(args) == 4 {
+				fourth := args[3]
+				switch second {
+				case "text":
+					return prompt.FilterHasPrefix(editTextSubcommands, fourth, true)
+				}
+			}
+		}
+
 	case "delete":
 		second := args[1]
 		if len(args) == 2 {

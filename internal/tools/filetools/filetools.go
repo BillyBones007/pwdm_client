@@ -2,7 +2,6 @@ package filetools
 
 import (
 	"errors"
-	"io/ioutil"
 	"os"
 
 	"github.com/BillyBones007/pwdm_client/internal/customerror"
@@ -33,7 +32,7 @@ func ReadTextFile(path string) (string, error) {
 			return "", customerror.ErrReadTextFile
 		}
 	}
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return "", customerror.ErrReadTextFile
 	}
@@ -50,7 +49,7 @@ func ReadBinaryFile(path string) ([]byte, error) {
 			return nil, customerror.ErrReadTextFile
 		}
 	}
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		return nil, customerror.ErrReadTextFile
 	}
@@ -59,7 +58,7 @@ func ReadBinaryFile(path string) ([]byte, error) {
 
 // WriteTextFile - creates and writes a text file with the specified name.
 func WriteTextFile(data string, name string) error {
-	err := ioutil.WriteFile(name, []byte(data), 0644)
+	err := os.WriteFile(name, []byte(data), 0644)
 	if err != nil {
 		return err
 	}
@@ -68,7 +67,7 @@ func WriteTextFile(data string, name string) error {
 
 // WriteBinaryFile - creates and writes a binary file with the specified name.
 func WriteBinaryFile(data []byte, name string) error {
-	err := ioutil.WriteFile(name, data, 0644)
+	err := os.WriteFile(name, data, 0644)
 	if err != nil {
 		return err
 	}
