@@ -1,7 +1,9 @@
 package validcard
 
 import (
+	"errors"
 	"fmt"
+	"regexp"
 	"strconv"
 	"strings"
 )
@@ -9,25 +11,23 @@ import (
 // Validator functions to ensure valid input
 func CnValidator(s string) error {
 	// Card Number should a string less than 20 digits
-	// It should include 16 integers and 3 spaces
-	if len(s) > 16+3 {
-		return fmt.Errorf("card number is too long")
+	if len(s) > 20 {
+		return errors.New("card number is too long")
+	}
+
+	// The format should be 4 groups of 4 digits separated by spaces
+	match, _ := regexp.MatchString(`^\d{4}\s\d{4}\s\d{4}\s\d{4}$`, s)
+	if !match {
+		return errors.New("card number is invalid")
 	}
 
 	// The last digit should be a number unless it is a multiple of 4 in which
 	// case it should be a space
-	if len(s)%5 == 0 && s[len(s)-1] != ' ' {
-		return fmt.Errorf("card number must separate groups with spaces")
+	if s[len(s)-1] == ' ' {
+		s = s[:len(s)-1]
 	}
-	if len(s)%5 != 0 && (s[len(s)-1] < '0' || s[len(s)-1] > '9') {
-		return fmt.Errorf("card number is invalid")
-	}
-
-	// The remaining digits should be integers
-	c := strings.ReplaceAll(s, " ", "")
-	_, err := strconv.ParseInt(c, 10, 64)
-	if err != nil {
-		return fmt.Errorf("the remaining digits should be integers")
+	if s[len(s)-1] < '0' || s[len(s)-1] > '9' {
+		return errors.New("card number is invalid")
 	}
 
 	return nil
@@ -54,6 +54,9 @@ func CVCValidator(s string) error {
 	// The CVC should be a number of 3 digits
 	// Since the input will already ensure that the CVC is a string of length 3,
 	// All we need to do is check that it is a number
+	if len(s) != 3 {
+		return fmt.Errorf("CVC - digital code with a length of no more than 3 characters")
+	}
 	_, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
 		return fmt.Errorf("CVC - digital code with a length of no more than 3 characters")
